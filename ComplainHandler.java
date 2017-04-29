@@ -8,23 +8,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ComplainManager extends Person implements Login {
+public class ComplainHandler extends Person implements Login {
 
-	
 	public boolean login(String Uname, String Pass) throws IOException {
-		
+	
 		try 
 		{
-		FileReader fr = new FileReader("Managers");
+		FileReader fr = new FileReader("Handlers");
 		BufferedReader br = new BufferedReader(fr);
 		while(true)
 		{
 			String name = br.readLine();
 			String pass = br.readLine();
-			this.name = name;
 			this.name = name;
 			if(name.equals("") || name.equals(null))
 			{
@@ -51,13 +50,15 @@ public class ComplainManager extends Person implements Login {
 		ArrayList<Response> responses ;
 		Response res = new Response();
 		res.id = id;
-		
-			int progress =  s.nextInt();
-			res.progress = progress;
+		System.out.println("Accept Or Reject");
+		String AR = s.nextLine();
+		if(res.isrejected = (AR.equals( "Accept")))
+		{
+			res.progress = 0;
 			res.ResponserName = name;
 			res.Response = "This Compalaint is Accepted Thanks For Complaining";
 		
-		
+		}
 		try{
 		fi = new FileInputStream(Cname + "Responses");
 		oi = new ObjectInputStream(fi);
@@ -88,7 +89,7 @@ public class ComplainManager extends Person implements Login {
 	
 	public void ReadComplains() throws IOException, ClassNotFoundException{
 	
-		fi = new FileInputStream(name);
+		fi = new FileInputStream("Complain");
 		oi = new ObjectInputStream(fi);
 		
 		ArrayList<Complain> complain = (ArrayList<Complain>)oi.readObject();
@@ -108,12 +109,9 @@ public class ComplainManager extends Person implements Login {
 				System.out.println( complain.get(i).Complain);
 				complain.get(i).Isread = true;
 				
-				System.out.println("Want to Forward It To some other Concerned Person ? ");
-				String inp = s.nextLine();
-				if(inp.equals("Yes"))
-				{
-					ForwardTo(s.nextLine(),complain.get(i));
-				}
+				System.out.println("Enter name to send this complain to ? ");
+				String a = s.nextLine();
+				ForwardTo(a,complain.get(i));
 				RespondToAComplain(complain.get(i).id,complain.get(i).Name);
 				}
 			}
@@ -130,13 +128,14 @@ public class ComplainManager extends Person implements Login {
 			RespondToAComplain(complain.get(index).id,complain.get(index).Name);
 			
 		}
-		fo = new FileOutputStream("name");
+		fo = new FileOutputStream("Compalin");
 		oo = new ObjectOutputStream(fo);
 		oo.writeObject(complain);
 		oo.close();
 		fo.close();
 		
 	}
+	
 	public void ForwardTo(String name , Complain c) throws IOException, ClassNotFoundException
 	{
 		fi = new FileInputStream(name);
@@ -154,4 +153,6 @@ public class ComplainManager extends Person implements Login {
 		
 		
 	}
+
 }
+
